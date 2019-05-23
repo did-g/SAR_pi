@@ -59,8 +59,8 @@ public:
       SAR_pi(void *ppimgr);
 
 //    The required PlugIn Methods
-      int Init(void);
-      bool DeInit(void);
+      int Init();
+      bool DeInit();
 
       int GetAPIVersionMajor();
       int GetAPIVersionMinor();
@@ -94,8 +94,10 @@ public:
       double GetCursorLon(void) {return m_cursor_lon;}
       double GetCursorLat(void) {return m_cursor_lat;}
 
+      void OnContextMenuItemCallback(int id) override;
 
       void OnSurveyDialogClose();
+      void ShowMenuItems(bool show);
 
 private:
       wxFileConfig      *m_pconfig;
@@ -108,7 +110,11 @@ private:
       int               m_iOpacity;
       int               m_leftclick_tool_id;
       bool              m_ShowHelp,m_bCaptureCursor,m_bCaptureShip;
-      double m_ship_lon,m_ship_lat,m_cursor_lon,m_cursor_lat;
+      double            m_ship_lon;
+      double            m_ship_lat;
+      double            m_cursor_lon;
+      double            m_cursor_lat;
+      int               m_position_menu_id;
 };
 
 #endif

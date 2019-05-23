@@ -66,7 +66,7 @@ SAR_pi::SAR_pi(void *ppimgr)
       initialize_images();
 }
 
-int SAR_pi::Init(void)
+int SAR_pi::Init()
 {
       AddLocaleCatalog( _T("opencpn-SAR_pi") );
 
@@ -89,7 +89,10 @@ int SAR_pi::Init(void)
             _("SAR"), _T(""), NULL,
              CALCULATOR_TOOL_POSITION, 0, this);
 
-      m_pDialog = NULL;
+      m_pDialog = nullptr;
+      wxMenu dummy_menu;
+      m_position_menu_id = AddCanvasContextMenuItem(new wxMenuItem(&dummy_menu, -1, _("SAR Position")), this );
+      SetCanvasMenuItemViz(m_position_menu_id, false);
 
       return (WANTS_CURSOR_LATLON      |
               WANTS_TOOLBAR_CALLBACK    |
@@ -97,11 +100,10 @@ int SAR_pi::Init(void)
               WANTS_NMEA_EVENTS         |
               WANTS_PREFERENCES         |
               WANTS_CONFIG
-
            );
 }
 
-bool SAR_pi::DeInit(void)
+bool SAR_pi::DeInit()
 {
       //    Record the dialog position
       if (NULL != m_pDialog)
@@ -175,14 +177,21 @@ void SAR_pi::SetColorScheme(PI_ColorScheme cs)
 
 void SAR_pi::OnToolbarToolCallback(int id)
 {
-      if(NULL == m_pDialog)
+      if(nullptr == m_pDialog)
       {
             m_pDialog = new Dlg(m_parent_window);
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
       }
- m_pDialog->Fit();
+      m_pDialog->Fit();
       m_pDialog->Show(!m_pDialog->IsShown());
+}
+
+void SAR_pi::OnContextMenuItemCallback(int id)
+{
+    if(id == m_position_menu_id && m_pDialog != nullptr) {
+        m_pDialog->OnCursor();
+    }
 }
 
 bool SAR_pi::LoadConfig(void)
@@ -263,4 +272,10 @@ void SAR_pi::SetPositionFix(PlugIn_Position_Fix &pfix)
         m_ship_lat = pfix.Lat;
         //std::cout<<"Ship--> Lat: "<<m_ship_lat<<" Lon: "<<m_ship_lon<<std::endl;
     }
+}
+
+void SAR_pi::ShowMenuItems(bool show)
+{
+    //SetToolbarItemState( m_leftclick_tool_id, show );
+    SetCanvasMenuItemViz(m_position_menu_id, show);
 }

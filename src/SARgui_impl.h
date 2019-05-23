@@ -72,11 +72,12 @@ public:
 
         void OnShip( wxCommandEvent& event );
         void OnCursor( wxCommandEvent& event );
-        void OnShip( void );
-        void OnCursor( void );
+        void OnShip();
+        void OnCursor();
         void key_shortcut(wxKeyEvent& event);
         void OnCursorSelect( wxCommandEvent& event );
         //void mouse_shortcut(wxMouseEvent& event);
+        bool Show(bool show) override;
 
         void Calculate( wxCommandEvent& event, bool Export, int Pattern );
 

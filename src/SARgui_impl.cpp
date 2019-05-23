@@ -620,3 +620,9 @@ void Dlg::OnCursorSelect(wxCommandEvent& event){
 }
 
 
+
+bool Dlg::Show(bool show)
+{
+    plugin->ShowMenuItems(show);
+    return DlgDef::Show(show);
+}
