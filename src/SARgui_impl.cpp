@@ -121,47 +121,65 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 void Dlg::OnPSCalc( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, false, 1);
+   Calculate(event, false, false, 1);
 }
 
 void Dlg::OnPSGPX( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, true, 1);
+   Calculate(event, true, false, 1);
 }
+void Dlg::OnPSRoute( wxCommandEvent& event )
+{
+   Calculate(event, false, true, 1);
+}
+
 void Dlg::OnESCalc( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, false, 2);
+   Calculate(event, false, false, 2);
 }
 void Dlg::OnESGPX( wxCommandEvent& event )
 {
     //wxMessageBox(_("Function not yet implemented :p")) ;
-    Calculate(event, true, 2);
+    Calculate(event, true, false, 2);
 }
+void Dlg::OnESRoute( wxCommandEvent& event )
+{
+   Calculate(event, false, true, 2);
+}
+
 void Dlg::OnSSCalc( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, false, 3);
+   Calculate(event, false, false, 3);
 }
 void Dlg::OnSSGPX( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, true, 3);
+   Calculate(event, true, false, 3);
+}
+void Dlg::OnSSRoute( wxCommandEvent& event )
+{
+   Calculate(event, false, true, 3);
 }
 
 void Dlg::OnORCalc( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, false, 4);
+   Calculate(event, false, false, 4);
 }
 void Dlg::OnORGPX( wxCommandEvent& event )
 {
    // wxMessageBox(_("Function not yet implemented :p")) ;
-   Calculate(event, true, 4);
+   Calculate(event, true, false, 4);
+}
+void Dlg::OnORRoute( wxCommandEvent& event )
+{
+   Calculate(event, false, true, 4);
 }
 
-void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
+void Dlg::Calculate( wxCommandEvent& event, bool write_file, bool to_route, int Pattern  )
 /*
 1 Parrallel Search
 2 Expanding Square
@@ -200,6 +218,14 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
     if (error_occurred) {
         wxMessageBox(_("error in input range validation"));
         return;
+    }
+
+    PlugIn_Route* newPath = nullptr;
+    if (to_route) {
+        newPath = new PlugIn_Route;
+        newPath->m_NameString = _T("SAR Route ");
+        newPath->m_StartString = _T("Datum");
+        newPath->m_EndString = _T( "End of grid" );
     }
 
     //Start GPX
@@ -288,6 +314,8 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
 
         //add  datum
         if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lat1), wxString::Format(wxT("%f"),lon1), _T("Datum") ,_T("diamond"),_T("WPT"));}
+        if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lat1, lon1, _T("diamond"), _T("Datum"))); }
+
         int n=0;
         //int multiplier=1;
         double lati, loni,ESheading=approach+180.0,ESdistance=leg_distancex/2;
@@ -301,6 +329,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
         lon1=loni;
 
         if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lati), wxString::Format(wxT("%f"),loni), _T("Start") ,_T("diamond"),_T("WPT"));}
+        if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lati, loni, _T("diamond"), _T("Start"))); }
 
         wxString wpt_title;
         for ( int x = 1; x <= nlegs; x++ ) { //Loop over the number of legs
@@ -320,19 +349,13 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
             destRhumb(lat1, lon1, -ESheading,ESdistance, &lati, &loni);
             SAR_distance+=ESdistance;
             if (write_file){Addpoint(Route,wxString::Format(wxT("%f"),lati),wxString::Format(wxT("%f"),loni), wpt_title ,_T("diamond"),_T("WPT"));}
+            if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lati, loni, _T("diamond"), wpt_title)); }
             lat1=lati;
             lon1=loni;
             }
         }
         this->m_Distance->SetValue(wxString::Format(wxT("%g"), SAR_distance));
         this->m_Time->SetValue(wxString::Format(wxT("%g"), SAR_distance/speed));
-
-
-
-
-
-
-
             //Expanding Parallel search End
             break;
         }
@@ -366,6 +389,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
 
             //add  datum
             if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lat1), wxString::Format(wxT("%f"),lon1), _T("Datum") ,_T("diamond"),_T("WPT"));}
+            if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lat1, lon1, _T("diamond"), _T("Datum"))); }
             int n=0;
             int multiplier=0;
             double lati, loni;
@@ -390,6 +414,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
                      destRhumb(lat1, lon1, ESheading,ESdistance, &lati, &loni);
                      SAR_distance+=ESdistance;
                      if (write_file){Addpoint(Route,wxString::Format(wxT("%f"),lati),wxString::Format(wxT("%f"),loni), wpt_title ,_T("diamond"),_T("WPT"));}
+                     if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lati, loni, _T("diamond"), wpt_title)); }
                      lat1=lati;
                      lon1=loni;
                 }
@@ -439,6 +464,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
         */
         //add  datum
         if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lat1), wxString::Format(wxT("%f"),lon1), _T("Datum") ,_T("diamond"),_T("WPT"));}
+        if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lat1, lon1, _T("diamond"), _T("Datum"))); }
         int n=0,nleg=0;
         double lati, loni;
         double ESheading=-approach;
@@ -453,7 +479,8 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
                 wpt_title=wxT("");
                 wpt_title << wxT("Leg (") << nleg << wxT(")");//" Pt(") << y <<wxT(")");
                 if (write_file){Addpoint(Route,wxString::Format(wxT("%f"),lati),wxString::Format(wxT("%f"),loni), wpt_title ,_T("diamond"),_T("WPT"));}
-                }
+                if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lati, loni, _T("diamond"), wpt_title)); }
+            }
 
             if  ( n % 9 ==0 ) {
                 nleg++;
@@ -461,7 +488,8 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
                 wpt_title << wxT("Leg (") << nleg << wxT(")");//" Pt(") << y <<wxT(")")
                 if (write_file){Addpoint(Route,wxString::Format(wxT("%f"),lati),wxString::Format(wxT("%f"),loni), wpt_title ,_T("diamond"),_T("WPT"));}
                 if (two_cycles) ESheading-=30;
-                }
+                if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lati, loni, _T("diamond"), wpt_title)); }
+            }
              lat1=lati;
              lon1=loni;
          }
@@ -500,6 +528,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
 
         //add  datum
         if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lat1), wxString::Format(wxT("%f"),lon1), _T("Datum") ,_T("diamond"),_T("WPT"));}
+        if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lat1, lon1, _T("diamond"), _T("Datum"))); }
         int n=0;
         int multiplier=1;
         double lati, loni,ESheading,ESdistance;
@@ -529,6 +558,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
             destRhumb(lat1, lon1, -ESheading,ESdistance, &lati, &loni);
             SAR_distance+=ESdistance;
             if (write_file){Addpoint(Route,wxString::Format(wxT("%f"),lati),wxString::Format(wxT("%f"),loni), wpt_title ,_T("diamond"),_T("WPT"));}
+            if (newPath) { newPath->pWaypointList->Append(new PlugIn_Waypoint(lati, loni, _T("diamond"), wpt_title)); }
             lat1=lati;
             lon1=loni;
             }
@@ -554,6 +584,14 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  )
             wxCharBuffer buffer=s.ToUTF8();
             if (dbg) std::cout<< buffer.data()<<std::endl;
             doc.SaveFile( buffer.data() );
+    }
+    if (newPath) {
+       AddPlugInRoute(newPath);
+       // not done PlugIn_Track DTOR
+       newPath->pWaypointList->DeleteContents( true );
+       newPath->pWaypointList->Clear();
+       delete newPath;
+       GetParent()->Refresh();
     }
 }
 

@@ -60,15 +60,19 @@ public:
 
         void OnPSCalc( wxCommandEvent& event );
         void OnPSGPX( wxCommandEvent& event );
+        void OnPSRoute( wxCommandEvent& event ) override;
 
         void OnESCalc( wxCommandEvent& event );
         void OnESGPX( wxCommandEvent& event );
+        void OnESRoute( wxCommandEvent& event ) override;
 
         void OnSSCalc( wxCommandEvent& event );
         void OnSSGPX( wxCommandEvent& event );
+        void OnSSRoute( wxCommandEvent& event ) override;
 
         void OnORCalc( wxCommandEvent& event );
         void OnORGPX( wxCommandEvent& event );
+        void OnORRoute( wxCommandEvent& event ) override;
 
         void OnShip( wxCommandEvent& event );
         void OnCursor( wxCommandEvent& event );
@@ -79,7 +83,7 @@ public:
         //void mouse_shortcut(wxMouseEvent& event);
         bool Show(bool show) override;
 
-        void Calculate( wxCommandEvent& event, bool Export, int Pattern );
+        void Calculate( wxCommandEvent& event, bool ToFile, bool ToRoute, int Pattern );
 
         void Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString ptname, wxString ptsym, wxString pttype);
 

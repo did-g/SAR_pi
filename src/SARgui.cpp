@@ -143,6 +143,9 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_button3111 = new wxButton( wx_panel_dome, wxID_ANY, _("Generate &GPX"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer71->Add( m_button3111, 0, wxALL, 5 );
 
+	m_button311231 = new wxButton( wx_panel_dome, wxID_ANY, _("To Route"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer71->Add( m_button311231, 0, wxALL, 5 );
+
 
 	bSizer1311->Add( bSizer71, 1, wxALIGN_CENTER, 5 );
 
@@ -162,7 +165,7 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel1->SetSizer( bSizer3 );
 	m_panel1->Layout();
 	bSizer3->Fit( m_panel1 );
-	m_notebook1->AddPage( m_panel1, _("SAR: Trackline"), false );
+	m_notebook1->AddPage( m_panel1, _("SAR: Trackline"), true );
 	m_panel2 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
 	m_panel2->SetMinSize( wxSize( -1,335 ) );
 
@@ -258,6 +261,9 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 
 	m_button31111 = new wxButton( m_panel7, wxID_ANY, _("Generate &GPX"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer711->Add( m_button31111, 0, wxALL, 5 );
+
+	m_button31123 = new wxButton( m_panel7, wxID_ANY, _("To Route"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer711->Add( m_button31123, 0, wxALL, 5 );
 
 
 	bSizer131->Add( bSizer711, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -374,6 +380,9 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_button311111 = new wxButton( m_panel8, wxID_ANY, _("Generate &GPX"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7111->Add( m_button311111, 0, wxALL, 5 );
 
+	m_button311232 = new wxButton( m_panel8, wxID_ANY, _("To Route"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7111->Add( m_button311232, 0, wxALL, 5 );
+
 
 	bSizer13->Add( bSizer7111, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 
@@ -395,7 +404,7 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel3->SetSizer( bSizer5 );
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
-	m_notebook1->AddPage( m_panel3, _("SAR: Sector Search"), true );
+	m_notebook1->AddPage( m_panel3, _("SAR: Sector Search"), false );
 	m_panek4 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panek4->SetMinSize( wxSize( 300,200 ) );
 
@@ -491,6 +500,9 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 
 	m_button311112 = new wxButton( m_panel10, wxID_ANY, _("Generate &GPX"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7112->Add( m_button311112, 0, wxALL, 5 );
+
+	m_button311233 = new wxButton( m_panel10, wxID_ANY, _("To Route"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7112->Add( m_button311233, 0, wxALL, 5 );
 
 
 	bSizer132->Add( bSizer7112, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -813,12 +825,16 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	// Connect Events
 	m_button311->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnPSCalc ), NULL, this );
 	m_button3111->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnPSGPX ), NULL, this );
+	m_button311231->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnPSRoute ), NULL, this );
 	m_button3112->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnESCalc ), NULL, this );
 	m_button31111->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnESGPX ), NULL, this );
+	m_button31123->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnESRoute ), NULL, this );
 	m_button31121->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnSSCalc ), NULL, this );
 	m_button311111->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnSSGPX ), NULL, this );
+	m_button311232->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnSSRoute ), NULL, this );
 	m_button31122->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnORCalc ), NULL, this );
 	m_button311112->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnORGPX ), NULL, this );
+	m_button311233->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnORRoute ), NULL, this );
 	m_wxNotebook234->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DlgDef::key_shortcut ), NULL, this );
 	m_wxNotebook234->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DlgDef::OnNoteBookFit ), NULL, this );
 	m_panel11->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DlgDef::key_shortcut ), NULL, this );
@@ -834,12 +850,16 @@ DlgDef::~DlgDef()
 	// Disconnect Events
 	m_button311->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnPSCalc ), NULL, this );
 	m_button3111->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnPSGPX ), NULL, this );
+	m_button311231->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnPSRoute ), NULL, this );
 	m_button3112->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnESCalc ), NULL, this );
 	m_button31111->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnESGPX ), NULL, this );
+	m_button31123->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnESRoute ), NULL, this );
 	m_button31121->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnSSCalc ), NULL, this );
 	m_button311111->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnSSGPX ), NULL, this );
+	m_button311232->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnSSRoute ), NULL, this );
 	m_button31122->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnORCalc ), NULL, this );
 	m_button311112->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnORGPX ), NULL, this );
+	m_button311233->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnORRoute ), NULL, this );
 	m_wxNotebook234->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DlgDef::key_shortcut ), NULL, this );
 	m_wxNotebook234->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DlgDef::OnNoteBookFit ), NULL, this );
 	m_panel11->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DlgDef::key_shortcut ), NULL, this );
